@@ -3,6 +3,7 @@ const TRAINERS_URL = `${BASE_URL}/trainers`;
 const POKEMONS_URL = `${BASE_URL}/pokemons`;
 const main = document.querySelector("main");
 
+//************* initialize *************
 fetch(TRAINERS_URL)
   .then(response => {
     return response.json()
@@ -11,12 +12,14 @@ fetch(TRAINERS_URL)
     return renderTrainers(data)
   });
 
+
+//************* functions *************
 function renderTrainers(data) {
     data.forEach((trainer) => {
         const trainerLi = document.createElement('li')
         trainerLi.innerHTML =`
             <div class="card" data-id="${trainer.id}"><p>${trainer.name}</p>
-            <button data-trainer-id="${trainer.id}">Add Pokemon</button>
+            <button class="add" data-trainer-id="${trainer.id}">Add Pokemon</button>
             <ul>               
             </ul>
             </div>
@@ -32,4 +35,12 @@ function renderTrainers(data) {
         main.append(trainerLi)
     }) 
 }
- 
+
+//************* event listeners *************
+main.addEventListener('click', function(e) {
+  if (e.target.matches("button.add")) {
+    const configObj = {
+      
+    }
+  }
+})
