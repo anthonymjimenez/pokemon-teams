@@ -28,10 +28,11 @@ function renderTrainers(data) {
         trainer.pokemons.forEach(pokemon => {
           const pokemonLi = document.createElement("li")
           pokemonLi.innerHTML = `
-            ${pokemon.nickname} (${pokemon.species}) <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
+          ${pokemon.nickname} (${pokemon.species}) <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
           `
           pokemonUl.append(pokemonLi)
         })
+        trainerLi.dataset.pokemonCount = pokemonUl.children.length
         main.append(trainerLi)
     }) 
 }
@@ -40,7 +41,29 @@ function renderTrainers(data) {
 main.addEventListener('click', function(e) {
   if (e.target.matches("button.add")) {
     const configObj = {
-      
+      method: "POST",
+      headers: {
+      'Content-Type': 'application/json'
+    },
+      body: JSON.stringify({trainer_id: e.target.dataset.trainerId})
     }
+    fetch(POKEMONS_URL, configObj)
+    .then(response => response.json())
+    .then(pokemon => {
+      if (pokemon.trainer_id) {
+        const trainerCard = document.querySelector(`[data-id="${pokemon.trainer_id}"]`)
+        const pokemonUl = trainerCard.querySelector("ul")
+        appendPokemonLi(trainerCard,pokemon)
+      }
+    })
   }
 })
+
+function appendPokemonLi(trainerLi, pokemon) {
+  const pokemonUl = trainerLi.querySelector('ul')
+  const pokemonLi = document.createElement("li")
+  pokemonLi.innerHTML = `
+    ${pokemon.nickname} (${pokemon.species}) <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
+    `
+  pokemonUl.append(pokemonLi)
+}
