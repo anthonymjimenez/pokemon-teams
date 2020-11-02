@@ -37,6 +37,15 @@ function renderTrainers(data) {
     }) 
 }
 
+function appendPokemonLi(trainerLi, pokemon) {
+  const pokemonUl = trainerLi.querySelector('ul')
+  const pokemonLi = document.createElement("li")
+  pokemonLi.innerHTML = `
+    ${pokemon.nickname} (${pokemon.species}) <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
+    `
+  pokemonUl.append(pokemonLi)
+}
+
 //************* event listeners *************
 main.addEventListener('click', function(e) {
   if (e.target.matches("button.add")) {
@@ -59,11 +68,14 @@ main.addEventListener('click', function(e) {
   }
 })
 
-function appendPokemonLi(trainerLi, pokemon) {
-  const pokemonUl = trainerLi.querySelector('ul')
-  const pokemonLi = document.createElement("li")
-  pokemonLi.innerHTML = `
-    ${pokemon.nickname} (${pokemon.species}) <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
-    `
-  pokemonUl.append(pokemonLi)
-}
+main.addEventListener('click', function(e) {
+  if (e.target.matches("button.release")) {
+    fetch(POKEMONS_URL+`/${e.target.dataset.pokemonId}`, {method:"DELETE"})
+    .then(response => json.())
+    .then(data => console.log("Success",data))
+  }
+
+})
+
+
+
